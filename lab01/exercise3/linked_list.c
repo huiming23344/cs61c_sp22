@@ -24,7 +24,7 @@ void free_list(Node *head) {
     }
 }
 
-/* Creates a new node whose data is set to DATA and adds it to the front of the
+/*eCreates a new node whose data is set to DATA and adds it to the front of the
    list pointed to by HEAD.
    This function is heavily commented for instructional purposes. Please
    never use this many comments when you are writing code. */
@@ -55,7 +55,7 @@ void print_list(struct Node *head) {
 
 /* Iteratively reverses a linked list whose first node is HEAD */
 void reverse_list(struct Node **head) {
-    if (head == NULL) {
+    if (head == NULL || *head == NULL) {
         return;
     }
     struct Node *curr = *head;
