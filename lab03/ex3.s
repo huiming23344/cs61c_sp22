@@ -22,6 +22,7 @@ dest:
     .word   0
 
 .text
+
 fun:
     addi t0, a0, 1
     sub t1, x0, a0
