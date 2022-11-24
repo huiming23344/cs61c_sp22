@@ -184,19 +184,103 @@ void update_state(game_state_t* state, int (*add_food)(game_state_t* state)) {
 }
 
 /* Task 5 */
+// SOURCE:https://github.com/DryLichen/cs61csp22/blob/main/proj1/state.c：
 game_state_t* load_board(char* filename) {
-  // TODO: Implement this function.
-  return NULL;
+    game_state_t *gsp = (game_state_t *)malloc(sizeof(game_state_t));
+    gsp->board = (char **)malloc(sizeof(char *));
+
+    FILE *fp = NULL;
+    fp = fopen(filename, "r");
+    char buffer[255];
+
+    // get the length of the rectanagle
+    fgets(buffer, 255, fp);
+    // delete the \n
+    buffer[strlen(buffer) - 1] = '\0';
+    int length = strlen(buffer);
+    gsp->x_size = length;
+    gsp->board[0] = malloc(sizeof(char) * (length + 1));
+    strcpy(gsp->board[0], buffer);
+
+    size_t i = 1;
+    for (; fgets(buffer, 255, fp); i++) {
+        gsp->board = (char **)realloc(gsp->board, sizeof(char *) * (i + 1));
+        gsp->board[i] = (char *)malloc(sizeof(char) * (length + 1));
+        buffer[strlen(buffer) - 1] = '\0';
+        strcpy(gsp->board[i], buffer);
+    }
+    gsp->y_size = i;
+
+    fclose(fp);
+    return gsp;
 }
 
 /* Task 6.1 */
+// SOURCE:https://github.com/DryLichen/cs61csp22/blob/main/proj1/state.c：
 static void find_head(game_state_t* state, int snum) {
-  // TODO: Implement this function.
-  return;
+    char c = '\0';
+    int count = 0, x = 0, y = 0;
+    bool lable = true;
+
+// find the snumth snake's tail
+    for (size_t i = 0; i < state->y_size && lable; i++) {
+        for (size_t j = 0; j < state->x_size; j++) {
+            c = get_board_at(state, j, i);
+            if (is_tail(c)) {
+                count++;
+            }
+            if (snum == count - 1) {
+                lable = false;
+                x = j;
+                y = i;
+                break;
+            }
+        }
+    }
+    state->snakes[snum].tail_x = x;
+    state->snakes[snum].tail_y = y;
+
+    // find the head
+    char next = c;
+    int next_x = x, next_y = y;
+    while (is_snake(next)) {
+        x = next_x;
+        y = next_y;
+        c = get_board_at(state, x, y);
+
+        next_x += incr_x(c);
+        next_y += incr_y(c);
+        next = get_board_at(state, next_x, next_y);
+    }
+    state->snakes[snum].head_x = x;
+    state->snakes[snum].head_y = y;
+    state->snakes[snum].live = (c != 'x') ? true : false;
+
+    return;
 }
 
 /* Task 6.2 */
+// SOURCE:https://github.com/DryLichen/cs61csp22/blob/main/proj1/state.c：
 game_state_t* initialize_snakes(game_state_t* state) {
-  // TODO: Implement this function.
-  return NULL;
+    char c = '\0';
+    int count = 0;
+
+    // count the number of snakes
+    for (size_t i = 0; i < state->y_size; i++) {
+        for (size_t j = 0; j < state->x_size; j++) {
+            c = get_board_at(state, j, i);
+            if (is_tail(c)) {
+                count++;
+            }
+        }
+    }
+    state->num_snakes = count;
+
+    // create the snakes
+    state->snakes = malloc(sizeof(snake_t) * count);
+    for (size_t i = 0; i < count; i++) {
+        find_head(state, i);
+    }
+
+    return state;
 }
