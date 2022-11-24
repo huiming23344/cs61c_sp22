@@ -49,7 +49,7 @@ clean:
 
 .PHONY: debug-unit-tests
 debug-unit-tests: unit-tests
-	cgdb ./unit-tests
+	lldb ./unit-tests
 
 .PHONY: run-unit-tests
 run-unit-tests: unit-tests

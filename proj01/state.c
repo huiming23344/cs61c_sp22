@@ -30,14 +30,47 @@ static void set_board_at(game_state_t* state, int x, int y, char ch) {
 
 /* Task 1 */
 game_state_t* create_default_state() {
-  // TODO: Implement this function.
-  return NULL;
+    snake_t* snake = (snake_t *)malloc(sizeof(bool) + sizeof(int) * 4);
+    snake->head_x = 5;
+    snake->head_y = 4;
+    snake->tail_x = 4;
+    snake->tail_y = 4;
+    snake->live = true;
+    game_state_t *game_state = (game_state_t *)malloc(sizeof(int) * 5);
+    game_state->x_size = 14;
+    game_state->y_size = 10;
+    char **board = (char **)malloc(sizeof(char *) * game_state->y_size);
+    for (int y = 0; y < game_state->y_size; y++) {
+        board[y] = (char *)malloc(sizeof(char) * game_state->x_size);
+        for (int x = 0; x < game_state->x_size; x++) {
+            if (x == 0
+                || x == game_state->x_size - 1
+                || y == 0
+                || y == game_state->y_size - 1) {
+                board[y][x] = '#';
+                //printf("added '#'");
+            } else if (y == snake->tail_y && x == snake->tail_x) {
+                board[y][x] = 'd';
+            } else if (y == snake->head_y && x == snake->head_x) {
+                board[y][x] = '>';
+            } else if (y == 2 && x == 9) {
+                board[y][x] = '*';
+            } else {
+                //printf("added ' '");
+                board[y][x] = ' ';
+            }
+        }
+    };
+    game_state->board = board;
+    game_state->num_snakes = 1;
+    game_state->snakes = snake;
+  return game_state;
 }
 
 /* Task 2 */
 void free_state(game_state_t* state) {
-  // TODO: Implement this function.
-  return;
+    
+    return;
 }
 
 /* Task 3 */
