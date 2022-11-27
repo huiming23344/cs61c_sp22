@@ -10,9 +10,11 @@
 # =================================================================
 abs:
 	# Prologue
-
-	# PASTE HERE
+  ebreak
+  bge a0, zero, done
+    # Negate a0
+  sub a0, x0, a0
 
 	# Epilogue
-
+done:
 	ret
