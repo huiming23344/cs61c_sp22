@@ -18,6 +18,7 @@
 #     this function terminates the program with error code 37
 # =======================================================
 dot:
+	for 
 
 	# Prologue
 
